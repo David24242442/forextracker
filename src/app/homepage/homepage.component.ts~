@@ -1,0 +1,153 @@
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { Chart } from 'chart.js/auto';
+
+@Component({
+  selector: 'app-homepage',
+  standalone: true,
+  imports: [CommonModule, HttpClientModule],
+  templateUrl: './homepage.component.html',
+  styleUrls: ['./homepage.component.css']
+})
+export class HomepageComponent implements OnInit, AfterViewInit {
+  @ViewChild('chartContainer') chartContainer!: ElementRef;
+
+  usdJpyRate: number | null = null;
+  jpyUsdRate: number | null = null;
+  usdJpyValue: number | null = null;
+  jpyUsdValue: number | null = null;
+  usdJpyChange: string | null = null;
+  jpyUsdChange: string | null = null;
+  usdJpyChangeClass: string = '';
+  jpyUsdChangeClass: string = '';
+  lastUpdated: string | null = null;
+  footerUpdated: string | null = null;
+  marketStatus: string | null = null;
+  usdJpyHigh: number | null = null;
+  usdJpyLow: number | null = null;
+  currentPeriod: string = '1D';
+  timePeriods: string[] = ['1D', '1W', '1M', '3M', '1Y'];
+  chart: Chart | null = null;
+  chartLoaded: boolean = false;
+  historicalData: any[] = [];
+
+  private readonly API_BASE_URL = 'https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1';
+  private readonly FALLBACK_API_URL = 'https://latest.currency-api.pages.dev/v1';
+
+  constructor(private http: HttpClient) {}
+
+  ngOnInit(): void {
+    this.initializeApp();
+  }
+
+  ngAfterViewInit(): void {
+    this.initializeChart();
+  }
+
+  async initializeApp(): Promise<void> {
+    try {
+      await this.fetchLatestRates();
+      await this.fetchHistoricalData();
+      setInterval(() => this.fetchLatestRates(), 60000);
+    } catch (error) {
+      console.error('Error initializing app:', error);
+      this.showError('Failed to initialize application. Please refresh the page.');
+    }
+  }
+
+  async fetchLatestRates(): Promise<void> {
+    try {
+      const response = await this.http.get<any>(`${this.API_BASE_URL}/currencies/usd.json`).toPromise();
+      console.log('Primary API Response:', response); // Debug: Check response
+      this.processApiData(response);
+    } catch (primaryError) {
+      console.error('Primary API error:', primaryError);
+      try {
+        const fallbackResponse = await this.http.get<any>(`${this.FALLBACK_API_URL}/currencies/usd.json`).toPromise();
+        console.log('Fallback API Response:', fallbackResponse); // Debug: Check response
+        this.processApiData(fallbackResponse);
+      } catch (fallbackError) {
+        console.error('Fallback API error:', fallbackError);
+        this.showError('Failed to fetch latest rates');
+      }
+    }
+  }
+
+  processApiData(data: any): void {
+    console.log('Raw API Data:', data); // Debug: Check raw data
+    const usdJpy = data.usd.jpy;
+    this.usdJpyRate = usdJpy;
+    this.jpyUsdRate = 1 / usdJpy;
+    this.usdJpyValue = usdJpy;
+    this.jpyUsdValue = this.jpyUsdRate;
+
+    this.usdJpyChange = '+0.00'; // Placeholder
+    this.jpyUsdChange = '-0.00'; // Placeholder
+    this.usdJpyChangeClass = this.usdJpyChange.startsWith('+') ? 'up' : 'down';
+    this.jpyUsdChangeClass = this.jpyUsdChange.startsWith('+') ? 'up' : 'down';
+
+    const now = new Date().toLocaleString();
+    this.lastUpdated = now;
+    this.footerUpdated = now;
+    this.marketStatus = 'Open'; // Simplified
+    this.usdJpyHigh = usdJpy + 0.5; // Placeholder
+    this.usdJpyLow = usdJpy - 0.5;  // Placeholder
+
+    console.log('Processed Data:', { usdJpyRate: this.usdJpyRate, jpyUsdRate: this.jpyUsdRate }); // Debug: Check processed data
+  }
+
+  async fetchHistoricalData(): Promise<void> {
+    // Simulate historical data for testing (since no real API is provided)
+    this.historicalData = [
+      { date: '2023-01-01', value: 130 },
+      { date: '2023-01-02', value: 131 },
+      { date: '2023-01-03', value: 129 }
+    ];
+    this.chartLoaded = true;
+    console.log('Historical Data:', this.historicalData); // Debug: Check data
+  }
+
+  initializeChart(): void {
+    if (this.chartContainer && this.chartContainer.nativeElement) {
+      console.log('Chart Container Found:', this.chartContainer.nativeElement); // Debug: Check DOM element
+      this.chart = new Chart(this.chartContainer.nativeElement, {
+        type: 'line',
+        data: {
+          labels: this.historicalData.map(d => d.date),
+          datasets: [{
+            label: 'USD/JPY',
+            data: this.historicalData.map(d => d.value),
+            borderColor: 'blue',
+            fill: false
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+      console.log('Chart Initialized:', this.chart); // Debug: Confirm chart creation
+    } else {
+      console.error('Chart container not found or not ready');
+    }
+  }
+
+  changePeriod(period: string): void {
+    this.currentPeriod = period;
+    this.updateChart();
+  }
+
+  updateChart(): void {
+    if (this.chart) {
+      this.chart.data.labels = this.historicalData.map(d => d.date);
+      this.chart.data.datasets[0].data = this.historicalData.map(d => d.value);
+      this.chart.update();
+      console.log('Chart Updated'); // Debug: Confirm update
+    }
+  }
+
+  showError(message: string): void {
+    console.log('Error:', message);
+  }
+}

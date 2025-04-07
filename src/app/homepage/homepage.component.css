@@ -1,0 +1,378 @@
+:root {
+  --primary-color: #0066cc;
+  --secondary-color: #004d99;
+  --accent-color: #ff9900;
+  --text-color: #333333;
+  --light-text: #666666;
+  --background-color: #f5f7fa;
+  --card-bg: #ffffff;
+  --positive-color: #28a745;
+  --negative-color: #dc3545;
+  --border-radius: 8px;
+  --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Header styles */
+header {
+  text-align: center;
+  margin-bottom: 30px;
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+  color: var(--primary-color);
+  margin-bottom: 10px;
+  font-size: 2.5rem;
+}
+
+header .subtitle {
+  color: var(--light-text);
+  font-size: 1.2rem;
+}
+
+/* Main content styles */
+main {
+  display: grid;
+  grid-gap: 30px;
+}
+
+/* Rate cards */
+.rates-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-gap: 20px;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h2 {
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.flags {
+  display: flex;
+  align-items: center;
+}
+
+.flag {
+  width: 30px;
+  height: auto;
+  border-radius: 4px;
+}
+
+.flags i {
+  margin: 0 10px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.card-body {
+  padding: 20px;
+  text-align: center;
+}
+
+.rate-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.rate-label {
+  font-size: 1.1rem;
+  color: var(--light-text);
+  margin-bottom: 15px;
+}
+
+.change {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-weight: bold;
+}
+
+.change-icon {
+  margin-right: 5px;
+}
+
+.positive {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: var(--positive-color);
+}
+
+.negative {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: var(--negative-color);
+}
+
+/* Chart section */
+.chart-container {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.chart-container h2 {
+  margin-bottom: 20px;
+  color: var(--primary-color);
+}
+
+.chart-controls {
+  display: flex;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.time-button {
+  background-color: transparent;
+  border: 1px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 8px 15px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.time-button:hover, .time-button.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.chart {
+  height: 400px;
+  position: relative;
+}
+
+.loading-chart {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--light-text);
+}
+
+/* Info section */
+.info-container {
+  margin-top: 20px;
+}
+
+.info-card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 20px;
+}
+
+.info-card h2 {
+  margin-bottom: 20px;
+  color: var(--primary-color);
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-weight: bold;
+}
+
+/* Footer styles */
+footer {
+  margin-top: 50px;
+  text-align: center;
+  padding: 20px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  color: var(--light-text);
+}
+
+footer a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+.disclaimer {
+  font-size: 0.9rem;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 2rem;
+  }
+
+  header .subtitle {
+    font-size: 1rem;
+  }
+
+  .rate-value {
+    font-size: 2rem;
+  }
+
+  .chart {
+    height: 300px;
+  }
+
+  .rates-container {
+    grid-template-columns: 1fr;
+  }
+
+  .time-button {
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+
+  .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .info-label {
+    margin-bottom: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 10px;
+  }
+
+  header {
+    padding: 15px 0;
+  }
+
+  header h1 {
+    font-size: 1.6rem;
+  }
+
+  .card-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .card-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .flags {
+    margin-top: 10px;
+  }
+
+  .rate-value {
+    font-size: 1.8rem;
+  }
+
+  .chart {
+    height: 250px;
+  }
+
+  .chart-controls {
+    justify-content: center;
+  }
+
+  .time-button {
+    margin-bottom: 8px;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+
+  footer {
+    font-size: 0.9rem;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: #3a8eff;
+    --secondary-color: #2d6bc9;
+    --accent-color: #ffb74d;
+    --text-color: #e0e0e0;
+    --light-text: #a0a0a0;
+    --background-color: #121212;
+    --card-bg: #1e1e1e;
+    --positive-color: #4caf50;
+    --negative-color: #f44336;
+  }
+
+  .card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  }
+
+  .time-button {
+    border-color: var(--primary-color);
+  }
+
+  .info-item {
+    border-bottom-color: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.chart-container {
+  position: relative;
+  height: 400px; /* Set a height for the chart */
+  width: 100%;
+}
+
+canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
